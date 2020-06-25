@@ -8,9 +8,11 @@ pipeline {
 				sh 'tidy -q -e ./green/index.html'
 			}
 		}		
-		stage('Build Docker Images') {		
+		stage('Build Docker Images') {	
+			steps	
 				sh './blue/run_docker.sh'
 				sh './green/run_docker.sh'
+			}
     	}
 	}
 }
