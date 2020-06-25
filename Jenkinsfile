@@ -7,13 +7,12 @@ pipeline {
 				sh 'tidy -q -e ./blue/index.html'
 				sh 'tidy -q -e ./green/index.html'
 			}
-		}
-		stage('Build Docker Image') {
-			steps{
+		}		
+		stage('Build Docker Images') {		
 				sh './blue/run_docker.sh'
 				sh './green/run_docker.sh'
-			}
-		}
-    }
+    	}
+	}
 }
+
 
