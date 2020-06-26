@@ -16,7 +16,10 @@ pipeline {
 		stage('Building image') {
 			steps{
 				script {
-					docker.build registry + ":$BUILD_NUMBER"
+					docker.build registry + ":$BUILD_NUMBER" {
+						sh '''docker build -t testblueimage -f "./blue/Dockerfile" .'''
+						sh '''docker build -t testgreenimage -f "./green/Dockerfile" .'''
+					}
 				}
 			}
 		}
