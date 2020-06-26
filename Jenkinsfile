@@ -16,12 +16,15 @@ pipeline {
 		}
 		stage('Build Push Images') {
 			steps {
-				withDockerRegistry([ credentialsId: "docker_hub_cred", url: "https://registry.hub.docker.com" ]) {
-					sh 'docker tag testblueimage ejejosh/testblueimage'
-					sh 'docker tag testgreenimage ejejosh/testgreenimage'
-					sh 'docker push ejejosh/testblueimage'
-					sh 'docker push ejejosh/testgreenimage'
+				script{
+					withDockerRegistry([ credentialsId: "DOCKER_HUB_CREDENTIALS", url: "https://registry.hub.docker.com" ]) {
+						sh 'docker tag testblueimage ejejosh/testblueimage'
+						sh 'docker tag testgreenimage ejejosh/testgreenimage'
+						sh 'docker push ejejosh/testblueimage'
+						sh 'docker push ejejosh/testgreenimage'
+					}
 				}
+				
 			}
 		}
 	}
