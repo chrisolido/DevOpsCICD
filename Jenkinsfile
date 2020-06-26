@@ -2,7 +2,7 @@
 pipeline {
 	environment {
 		registry = "ejejosh/pipeline"
-		registryCredential = ‘MY_DOCKER_HUB’
+		registryCredential = 'MY_DOCKER_HUB'
 	}
 	agent any
 	stages {
