@@ -10,15 +10,16 @@ pipeline {
 		}		
 		stage('Build Docker Images') {	
 			steps{	
-				//sh '''docker build -t testblueimage -f "./blue/Dockerfile" .'''
-				//sh '''docker build -t testblueimage -f "./green/Dockerfile" .'''
+				sh '''docker build -t testblueimage -f "./blue/Dockerfile" .'''
+				sh '''docker build -t testgreenimage -f "./green/Dockerfile" .'''
     		}
 		}
-		stage('Build Push Images') {	
-			
-			docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_HUB_CREDENTIALS') {      
-				sh '''./blue/upload_docker.sh'''
-				sh '''./green/upload_docker.sh'''
+		stage('Build Push Images') {
+			steps {
+				withDockerRegistry([ credentialsId: "docker_hub_cred", url: "https://registry.hub.docker.com" ]) {
+					sh 'docker push ejejosh/testblueimage'
+					sh 'docker push ejejosh/testgreenimage'
+				}
 			}
 		}
 	}
