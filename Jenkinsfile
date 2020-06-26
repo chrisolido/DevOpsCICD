@@ -1,10 +1,10 @@
   
 pipeline {
-	environment {
-		registry = "ejejosh/pipeline"
-		registryCredential = 'MY_DOCKER_HUB'
-	}
 	agent any
+	
+	def testblue
+	def testgreen
+
 	stages {
 		stage('Lint HTML') {
 			steps {
@@ -12,31 +12,40 @@ pipeline {
 				sh 'tidy -q -e ./green/index.html'
 			}
 		}
-
-		stage('Building image') {
+		stage('Build image') {
+			/* This builds the actual image */
 			steps{
-				script {
-						docker.build registry + '''-t testblueimage -f "./blue/Dockerfile" .''' 
-						docker.build registry + '''-t testgreenimage -f "./green/Dockerfile" .''' 
-
-						//sh '''docker build -t testblueimage -f "./blue/Dockerfile" .'''
-						//sh '''docker build -t testgreenimage -f "./green/Dockerfile" .'''
-					}
-				}
+				testblue = docker.build("ejejosh/testblueimage")
+				testgreen = docker.build("ejejosh/testgreenimage")
 			}
-		
-		stage('Deploy Image') {
+			
+    	}
+		stage('Test image') { 
+			/* Running a test to ensure the images are successfully built*/
 			steps{
-				script {
-					docker.withRegistry( '', registryCredential ) {
-						dockerImage.push()
-					}
+				testblue.inside {
+					echo "Blue Image Tests passed"
 				}
-			}
-		}	
-	}	
-}
-
+				testgreen.inside {
+					echo "Green Image Tests passed"
+				}
+			}       
+			
+		}
+		stage('Push image') {
+			/*This registers with DockerHub before pushing images to docker hub account*/
+			steps{
+				docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_HUB_CRED') {
+					testblue.push("${env.BUILD_NUMBER}")
+					testblue.push("latest")
+					testgreen.push("${env.BUILD_NUMBER}")
+					testgreen.push("latest")
+				} 
+				echo "Pushing Docker Build to DockerHub"
+			}				
+		}
+	}
+}			
 
 
 
