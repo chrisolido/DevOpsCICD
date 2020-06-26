@@ -10,15 +10,12 @@ pipeline {
 		}		
 		stage('Build Docker Images') {	
 			steps{	
-				//sh 'docker.build("testblueimage", "-f ./blue/Dockerfile .")'
-				//sh 'docker run -p 8000:80 testgreenimage'
-				//sh 'docker.build("testblueimage", "-f ./green/Dockerfile .")' 
-				//sh 'docker run -p 8000:80 testgreenimage'
-
-				sh './blue/run_docker.sh '
-				sh './green/run_docker.sh'
-			}
-    	}
+				sh 'docker.build("testblueimage", "-f ./blue .")'
+				sh 'docker run -p 8000:80 testgreenimage'
+				sh 'docker.build("testblueimage", "-f ./green .")' 
+				sh 'docker run -p 8000:80 testgreenimage'
+    		}
+		}
 	}
 }			
 
