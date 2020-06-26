@@ -14,12 +14,10 @@ pipeline {
 				sh './green/run_docker.sh'
 			}
     	}
-		stage('Push docker image') {
-			steps{
-				docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_HUB_CREDENTIALS'){
-					sh './blue/upload_docker.sh'
-					sh './green/upload_docker.sh'
-				}
+		stage('Push docker image') 
+			docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_HUB_CREDENTIALS'){
+				sh './blue/upload_docker.sh'
+				sh './green/upload_docker.sh'
 			}
 		}
 	}			
