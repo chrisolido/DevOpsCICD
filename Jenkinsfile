@@ -10,8 +10,11 @@ pipeline {
 		}		
 		stage('Build Docker Images') {	
 			steps{	
-				sh './blue/run_docker.sh'
-				sh './green/run_docker.sh'
+				sh 'docker build --tag=testblueimage .'
+				sh 'docker run -p 8000:80 testgreenimage'
+
+				sh 'docker build --tag=testgreenimage .'
+				sh 'docker run -p 8000:80 testgreenimage'
 			}
     	}
 	}
