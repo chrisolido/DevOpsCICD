@@ -1,5 +1,9 @@
   
 pipeline {
+	environment {
+		registry = "ejejosh/pipeline"
+		registryCredential = ‘MY_DOCKER_HUB’
+	}
 	agent any
 	stages {
 		stage('Lint HTML') {
@@ -7,26 +11,24 @@ pipeline {
 				sh 'tidy -q -e ./blue/index.html'
 				sh 'tidy -q -e ./green/index.html'
 			}
-		}		
-		stage('Build Docker Images') {	
-			steps{	
-				sh '''docker build -t testblueimage -f "./blue/Dockerfile" .'''
-				sh '''docker build -t testgreenimage -f "./green/Dockerfile" .'''
-    		}
 		}
-		stage('Build Push Images') {
-			steps {
-				script{
-					withDockerRegistry([ credentialsId: "DOCKER_HUB_CREDENTIALS", url: "https://registry.hub.docker.com" ]) {
-						sh 'docker tag testblueimage ejejosh/testblueimage'
-						sh 'docker tag testgreenimage ejejosh/testgreenimage'
-						sh 'docker push ejejosh/testblueimage'
-						sh 'docker push ejejosh/testgreenimage'
-					}
+
+		stage('Building image') {
+			steps{
+				script {
+					docker.build registry + ":$BUILD_NUMBER"
 				}
-				
 			}
 		}
+		stage('Deploy Image') {
+			steps{
+				script {
+					docker.withRegistry( '', registryCredential ) {
+						dockerImage.push()
+					}
+				}
+			}
+		}		
 	}
 }			
 
