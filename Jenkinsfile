@@ -2,7 +2,7 @@ pipeline {
 	environment {
 		registry = "ejejosh/testblueimage"
 		registryCredential = 'DOCKER_HUB_CRED'
-		PATH = ./blue
+		${env.PATH} = "./blue/Dockerfile"
 	}  
 	agent any  
 
