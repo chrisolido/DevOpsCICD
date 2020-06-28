@@ -1,6 +1,6 @@
   
-node {
-	//agent any	
+pipeline {
+	agent any	
 
 	def testblue 
 	def testgreen 
