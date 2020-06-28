@@ -2,7 +2,6 @@ pipeline {
 	environment {
 		registry = "ejejosh/testblueimage"
 		registryCredential = 'DOCKER_HUB_CRED'
-		${env.PATH} = "./blue/Dockerfile"
 	}  
 	agent any  
 
@@ -10,7 +9,7 @@ pipeline {
 		stage('Building image') {
 			steps{
 				script {
-					docker.build registry + ":$BUILD_NUMBER"
+					docker.build registry + ":$BUILD_NUMBER", "-f ./blue/Dockerfile ./blue"
 				}
 			}
 		}
