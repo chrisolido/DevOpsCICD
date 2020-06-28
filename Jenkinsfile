@@ -5,13 +5,26 @@ pipeline {
 	}  
 	agent any  
 
-	stages {
-		stage('Building image') {
-			steps{
-				script {
-					docker.build registry + ":testblueimage", "-f ./blue/Dockerfile ./blue"
-				}
+	stage('Lint HTML') {
+		steps {
+			sh 'tidy -q -e ./blue/index.html'
+		}
+	}
+	stage('Building image') {
+		steps{
+			script {
+				dockerImage = docker.build registry + ":testblueimage", "-f ./blue/Dockerfile ./blue"
 			}
 		}
+	}
+	stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+          }
+        }
+      }
     }
+    
 }
