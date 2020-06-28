@@ -1,10 +1,6 @@
   
 pipeline {
 	agent any	
-
-	def testblue 
-	def testgreen 
-
 	stages {
 		stage('Lint HTML') {
 			steps {
