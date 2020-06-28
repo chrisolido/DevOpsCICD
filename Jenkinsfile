@@ -13,7 +13,7 @@ pipeline {
             docker.withRegistry('https://docker.mycorp.com/', 'DOCKER_HUB_CRED') {
                 // docker build images
                 def testblue = docker.build("ejejosh/testblueimage")
-                def testblue = docker.build("ejejosh/testgreenimage")
+                def testgreen = docker.build("ejejosh/testgreenimage")
                 
                 sh "docker pull --all-tags ${myImg.imageName()}"
                 // runs: docker pull --all-tags docker.mycorp.com/myImg
