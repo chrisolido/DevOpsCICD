@@ -8,27 +8,22 @@ pipeline {
 				sh 'tidy -q -e ./green/index.html'
 			}
 		}
-		stage('Build image') {
-			/* This builds the actual image */
-			steps{
-				sh 'testblue = docker.build("ejejosh/testblueimage")'
-				sh 'testgreen = docker.build("ejejosh/testgreenimage")'
-			}
-			
-    	}		
-	
-		stage('Push image') {
-			/*This registers with DockerHub before pushing images to docker hub account*/
-			steps{
-				docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_HUB_CRED') {
-					testblue.push("${env.BUILD_NUMBER}")
-					testblue.push("latest")
-					testgreen.push("${env.BUILD_NUMBER}")
-					testgreen.push("latest")
-				} 
-				echo "Pushing Docker Build to DockerHub"
-			}				
-		}
+		stage('Build and Push image') {
+			//This registers with DockerHub before pushing images to docker hub account
+            docker.withRegistry('https://docker.mycorp.com/', 'DOCKER_HUB_CRED') {
+                // docker build images
+                def testblue = docker.build("ejejosh/testblueimage")
+                def testblue = docker.build("ejejosh/testgreenimage")
+                
+                sh "docker pull --all-tags ${myImg.imageName()}"
+                // runs: docker pull --all-tags docker.mycorp.com/myImg
+                sh 'testblue.push("${env.BUILD_NUMBER}")'
+				sh 'testblue.push("latest")'
+				sh 'testgreen.push("${env.BUILD_NUMBER}")'
+				sh 'testgreen.push("latest")'
+			} 
+			echo "Pushing Docker Build to DockerHub"
+        }
 	}
 }			
 
