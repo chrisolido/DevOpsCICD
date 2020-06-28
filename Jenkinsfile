@@ -12,8 +12,11 @@ pipeline {
 		stage('Build image') {
 			/* This builds the actual image */
 			steps{
-				def testblue = docker.build("ejejosh/testblueimage")
-				def testgreen = docker.build("ejejosh/testgreenimage")
+				script{
+					def testblue = docker.build("ejejosh/testblueimage")
+					def testgreen = docker.build("ejejosh/testgreenimage")
+				}
+				
 			}
 			
     	}		
