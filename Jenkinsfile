@@ -1,6 +1,9 @@
   
-pipeline {
-	agent any	
+node {
+	//agent any	
+
+	def testblue 
+	def testgreen 
 
 	stages {
 		stage('Lint HTML') {
@@ -12,11 +15,8 @@ pipeline {
 		stage('Build image') {
 			/* This builds the actual image */
 			steps{
-				script{
-					def testblue = docker.build("ejejosh/testblueimage")
-					def testgreen = docker.build("ejejosh/testgreenimage")
-				}
-				
+				testblue = docker.build("ejejosh/testblueimage")
+				testgreen = docker.build("ejejosh/testgreenimage")
 			}
 			
     	}		
