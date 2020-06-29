@@ -13,7 +13,7 @@ pipeline {
 		stage('Building image') {
 			steps{
 				script {
-					dockerImage = docker.build registry + ":BUILD_NUMBER", "-f ./blue/Dockerfile ./blue"
+					dockerImage = docker.build registry + "testblueimage", "-f ./blue/Dockerfile ./blue"
 				}
 			}
 		}
@@ -28,8 +28,8 @@ pipeline {
 		} 
 		stage("Deploy Apllication in K8S Cluster"){
 			steps{
-				sh 'kubectl create -f ./blue/blue-controller.json'
-				sh 'kubectl create -f ./blue-green-service.json'
+				sh 'kubectl apply -f ./blue/blue-controller.json'
+				sh 'kubectl apply -f ./blue-green-service.json'
 			}
 			
 		}
