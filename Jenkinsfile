@@ -13,7 +13,7 @@ pipeline {
 		stage('Building image') {
 			steps{
 				script {
-					dockerImage = docker.build registry + "testblueimage", "-f ./blue/Dockerfile ./blue"
+					dockerImage = docker.build registry + "testblueimage", "-f ./blue/Dockerfile ./testblueimage"
 				}
 			}
 		}
