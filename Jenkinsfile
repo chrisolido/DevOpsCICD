@@ -28,7 +28,8 @@ pipeline {
 		} 
 		stage("Deploy Apllication in K8S Cluster"){
 			steps{
-				sh 'kubectl create -f ./blue-green-service.json'
+				sh 'kubectl apply -f ./blue-controller.json'
+				sh 'kubectl apply -f ./blue-green-service.json'
 			}
 			
 		}
